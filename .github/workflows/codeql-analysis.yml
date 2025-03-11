@@ -1,0 +1,36 @@
+# File: .github/workflows/codeql-analysis.yml
+name: "CodeQL Analysis"
+
+on:
+  workflow_dispatch:
+  #push:
+    #branches: [ main ]
+  #pull_request:
+    #branches: [ main ] 
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript  # Change as needed: 'javascript', 'python', 'java', etc.
+        # Specify CodeQL version 2.20.5
+        tools: github/codeql-cli:2.20.5
+
+    # Autobuild attempts to build any compiled languages
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
