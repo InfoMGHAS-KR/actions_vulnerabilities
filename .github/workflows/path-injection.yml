@@ -1,0 +1,20 @@
+# Example 1: PATH Injection Vulnerability
+# Filename: .github/workflows/path-injection.yml
+name: Path Injection Demo
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Process issue
+        run: |
+          # VULNERABLE: Directly adding user input to PATH
+          echo "PATH=$PATH:${{ github.event.issue.title }}" >> $GITHUB_ENV
+          echo "Processing issue with custom path"
+          run-tool
