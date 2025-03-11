@@ -1,0 +1,22 @@
+# Example 5: Untrusted Checkout Vulnerability
+# This workflow has access to repository secrets but checks out untrusted code
+name: Untrusted Checkout Demo
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # VULNERABLE: Using pull_request_target with explicit checkout of PR
+      - name: Checkout PR
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          
+      - name: Build project
+        run: |
+          ./build.sh
+          
+    
