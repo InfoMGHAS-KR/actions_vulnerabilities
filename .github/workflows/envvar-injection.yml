@@ -1,0 +1,19 @@
+# Example 2: Environment Variable Injection
+name: Environment Variable Injection Demo
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  process-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set env vars
+        # VULNERABLE: User input directly into environment variables
+        run: |
+          echo "CONFIG_OPTIONS=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+          
+      - name: Use variables
+        run: |
+          echo "Using config options: $CONFIG_OPTIONS"
+          ./configure $CONFIG_OPTIONS
