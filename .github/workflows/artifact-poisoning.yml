@@ -1,0 +1,26 @@
+# Example 4: Artifact Poisoning Vulnerability
+name: Artifact Poisoning Demo
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_name:
+        description: 'Name of artifact to download'
+        required: true
+
+jobs:
+  download-and-use:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          # VULNERABLE: User-controlled artifact name without verification
+          name: ${{ github.event.inputs.artifact_name }}
+          path: ./downloaded
+          
+      - name: Use artifact
+        run: |
+          cd ./downloaded
+          # VULNERABLE: No verification before executing
+          chmod +x ./script.sh
+          ./script.sh
